@@ -52,6 +52,16 @@ public class ClientServicePF {
 
     }
 
+    public Optional<ResponseDTO> findByCpf(String cpf){
+        Optional<Fisica> cliente = clientPFRepository.findByCpf(cpf);
+
+        return cliente.map(fisica ->
+                new ResponseDTO("Cliente encontrado!",
+                        this.clientConverter.toClientPFDTO(fisica),
+                        LocalDateTime.now()));
+
+    }
+
     public Optional<ResponseDTO<ClientePFDTO>> update(Fisica fisica) {
         Optional<Fisica> client = this.clientPFRepository.findById(String.valueOf(fisica.getIdentificacao()));
         return client.map(

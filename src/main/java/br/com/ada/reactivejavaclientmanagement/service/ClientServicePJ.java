@@ -52,6 +52,16 @@ public class ClientServicePJ {
                         LocalDateTime.now()));
 
     }
+
+    public Optional<ResponseDTO> findByCnpj(String cnpj){
+        Optional<Juridica> cliente = clientPJRepository.findById(cnpj);
+
+        return cliente.map(juridica ->
+                new ResponseDTO("Cliente encontrado!",
+                        this.clientConverter.toClientPJDTO(juridica),
+                        LocalDateTime.now()));
+
+    }
     public Optional<ResponseDTO<ClientePJDTO>> update(Juridica juridica) {
         Optional<Juridica> client = this.clientPJRepository.findById(String.valueOf(juridica.getIdentificacao()));
         return client.map(

@@ -11,5 +11,7 @@ public interface ClientPFRepository extends JpaRepository<Fisica, String> {
 
     Optional<Fisica> findById(String id);
 
+    Optional<Fisica> findByCpf(String cpf);
+
     void deleteById(String id);
 }
