@@ -12,7 +12,7 @@ public interface ClientPJRepository extends JpaRepository<Juridica, String> {
 
     Optional<Juridica> findById(String id);
 
-    Optional<Fisica> findByCnpj(String cnpj);
+    Optional<Juridica> findByCnpj(String cnpj);
 
     void deleteById(String id);
 }

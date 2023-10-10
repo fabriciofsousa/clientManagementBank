@@ -54,7 +54,7 @@ public class ClientServicePJ {
     }
 
     public Optional<ResponseDTO> findByCnpj(String cnpj){
-        Optional<Juridica> cliente = clientPJRepository.findById(cnpj);
+        Optional<Juridica> cliente = clientPJRepository.findByCnpj(cnpj);
 
         return cliente.map(juridica ->
                 new ResponseDTO("Cliente encontrado!",
