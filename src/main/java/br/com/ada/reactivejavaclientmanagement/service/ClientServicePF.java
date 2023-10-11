@@ -3,6 +3,7 @@ package br.com.ada.reactivejavaclientmanagement.service;
 import br.com.ada.reactivejavaclientmanagement.converter.ClientConverter;
 import br.com.ada.reactivejavaclientmanagement.dto.ClientePFDTO;
 import br.com.ada.reactivejavaclientmanagement.dto.ResponseDTO;
+import br.com.ada.reactivejavaclientmanagement.exception.ClientNaoEncontradoException;
 import br.com.ada.reactivejavaclientmanagement.model.Fisica;
 import br.com.ada.reactivejavaclientmanagement.model.Juridica;
 import br.com.ada.reactivejavaclientmanagement.repository.ClientPFRepository;
@@ -37,47 +38,47 @@ public class ClientServicePF {
                         LocalDateTime.now())));
     }
 
-    public Optional<List<Fisica>> getAllPF(){
-        return Optional.of(clientPFRepository.findAll());
+    public Optional<List<Fisica>> getAllPF() throws Exception {
+        return Optional.ofNullable(Optional.of(clientPFRepository.findAll()).orElseThrow(() -> new Exception("Erro ao buscar lista de clientes!")));
     }
 
 
     public Optional<ResponseDTO> findById(String id){
         Optional<Fisica> cliente = clientPFRepository.findById(id);
 
-        return cliente.map(fisica ->
+        return Optional.ofNullable(cliente.map(fisica ->
                 new ResponseDTO("Cliente encontrado!",
                         this.clientConverter.toClientPFDTO(fisica),
-                        LocalDateTime.now()));
+                        LocalDateTime.now())).orElseThrow(() -> new ClientNaoEncontradoException("Não encontrado cliente de ID " + id)));
 
     }
 
     public Optional<ResponseDTO> findByCpf(String cpf){
         Optional<Fisica> cliente = clientPFRepository.findByCpf(cpf);
 
-        return cliente.map(fisica ->
+        return Optional.ofNullable(cliente.map(fisica ->
                 new ResponseDTO("Cliente encontrado!",
                         this.clientConverter.toClientPFDTO(fisica),
-                        LocalDateTime.now()));
+                        LocalDateTime.now())).orElseThrow(() -> new ClientNaoEncontradoException("Não encontrado cliente de cpf " + cpf)));
 
     }
 
-    public Optional<ResponseDTO<ClientePFDTO>> update(Fisica fisica) {
+    public Optional<ResponseDTO<ClientePFDTO>> update(Fisica fisica) throws Exception {
         Optional<Fisica> client = this.clientPFRepository.findById(String.valueOf(fisica.getIdentificacao()));
-        return client.map(
-                (existingClient) ->{
-                    return this.clientPFRepository.save(fisica);
-                })
+        return Optional.ofNullable(client.map(
+                        (existingClient) -> {
+                            return this.clientPFRepository.save(fisica);
+                        })
 
                 .map(
                         clienteSucesso ->
                                 new ResponseDTO<>("Cliente alterado com sucesso!",
-                this.clientConverter.toClientPFDTO(clienteSucesso),
-                LocalDateTime.now()));
+                                        this.clientConverter.toClientPFDTO(clienteSucesso),
+                                        LocalDateTime.now())).orElseThrow(() -> new Exception("Erro ao atualizar")));
     }
 
     public void delete(String id) {
+        findById(id);
         this.clientPFRepository.deleteById(id);
     }
-
 }

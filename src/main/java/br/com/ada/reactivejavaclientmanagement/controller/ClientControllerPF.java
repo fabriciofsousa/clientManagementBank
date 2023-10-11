@@ -35,7 +35,7 @@ public class ClientControllerPF {
     @GetMapping
     @ResponseStatus(value = HttpStatus.OK)
     @Operation(description = "Find all clients PF")
-    public Optional<List<Fisica>> getAll(){
+    public Optional<List<Fisica>> getAll() throws Exception {
         return clientServicePF.getAllPF();
     }
 
@@ -50,7 +50,7 @@ public class ClientControllerPF {
     @PutMapping
     @ResponseStatus(value = HttpStatus.OK)
     @Operation(description = "Update a client PF")
-    public Optional<ResponseDTO<ClientePFDTO>> update(@RequestBody Fisica clientDTO){
+    public Optional<ResponseDTO<ClientePFDTO>> update(@RequestBody Fisica clientDTO) throws Exception {
         return this.clientServicePF.update(clientDTO);
     }
 

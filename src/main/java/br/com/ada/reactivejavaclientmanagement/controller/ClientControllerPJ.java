@@ -28,14 +28,14 @@ public class ClientControllerPJ {
     @ResponseStatus(value = HttpStatus.CREATED)
     @Operation(description = "Create a client (Pessoa Juridica)",
             requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody())
-    public Optional<ResponseDTO> createPj(@RequestBody Juridica juridica){
+    public Optional<ResponseDTO> createPj(@RequestBody Juridica juridica) throws Exception {
         return clientServicePJ.createPJ(juridica);
     }
 
     @GetMapping
     @ResponseStatus(value = HttpStatus.OK)
     @Operation(description = "Find all clients PJ")
-    public Optional<List<Juridica>> getAllPJ(){
+    public Optional<List<Juridica>> getAllPJ() throws Exception {
         return clientServicePJ.getAllPJ();
     }
 
@@ -50,7 +50,7 @@ public class ClientControllerPJ {
     @PutMapping
     @ResponseStatus(value = HttpStatus.OK)
     @Operation(description = "Update a client PJ")
-    public Optional<ResponseDTO<ClientePJDTO>> update(@RequestBody Juridica clientDTO){
+    public Optional<ResponseDTO<ClientePJDTO>> update(@RequestBody Juridica clientDTO) throws Exception {
         return this.clientServicePJ.update(clientDTO);
     }
 
